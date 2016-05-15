@@ -6,8 +6,8 @@
 
 Summary: Package that installs %scl
 Name: %scl_name
-Version: 4.0
-Release: 9%{?dist}
+Version: 4.1
+Release: 3%{?dist}
 License: GPLv2+
 Group: Applications/File
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -74,6 +74,12 @@ Requires: %{scl_prefix}eclipse-cdt
 Requires: %{scl_prefix}eclipse-cdt-docker
 Requires: %{scl_prefix}eclipse-cdt-parsers
 Requires: %{scl_prefix}eclipse-changelog
+Requires: %{scl_prefix}eclipse-dltk
+Requires: %{scl_prefix}eclipse-dltk-mylyn
+Requires: %{scl_prefix}eclipse-dltk-rse
+Requires: %{scl_prefix}eclipse-dltk-ruby
+Requires: %{scl_prefix}eclipse-dltk-sh
+Requires: %{scl_prefix}eclipse-dltk-tcl
 Requires: %{scl_prefix}eclipse-egit
 Requires: %{scl_prefix}eclipse-egit-mylyn
 Requires: %{scl_prefix}eclipse-emf-runtime
@@ -86,6 +92,7 @@ Requires: %{scl_prefix}eclipse-linuxtools
 Requires: %{scl_prefix}eclipse-linuxtools-docker
 Requires: %{scl_prefix}eclipse-linuxtools-javadocs
 Requires: %{scl_prefix}eclipse-linuxtools-libhover
+Requires: %{scl_prefix}eclipse-linuxtools-vagrant
 Requires: %{scl_prefix}eclipse-manpage
 Requires: %{scl_prefix}eclipse-mylyn
 Requires: %{scl_prefix}eclipse-mylyn-builds
@@ -107,7 +114,6 @@ Requires: %{scl_prefix}eclipse-pde
 Requires: %{scl_prefix}eclipse-perf
 Requires: %{scl_prefix}eclipse-platform
 Requires: %{scl_prefix}eclipse-ptp
-Requires: %{scl_prefix}eclipse-ptp-master
 Requires: %{scl_prefix}eclipse-ptp-rm-contrib
 Requires: %{scl_prefix}eclipse-ptp-sci
 Requires: %{scl_prefix}eclipse-ptp-sdm
@@ -139,6 +145,7 @@ Package shipping performance tools (systemtap, oprofile)
 %package dockerfiles
 Summary: Package shipping Dockerfiles for Developer Toolset
 Group: Applications/File
+Requires: gcc
 
 %description dockerfiles
 This package provides a set of example Dockerfiles that can be used
@@ -364,6 +371,8 @@ install -d -m 755 %{buildroot}%{_scl_scripts}
 install -p -m 755 sudo %{buildroot}%{_bindir}/
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/java
+install -d -m 755 %{buildroot}%{_sysconfdir}/java/security
+install -d -m 755 %{buildroot}%{_sysconfdir}/java/security/security.d
 install -p -m 644 java.conf %{buildroot}%{_sysconfdir}/java/
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/ivy
@@ -371,6 +380,19 @@ install -p -m 644 ivysettings.xml %{buildroot}%{_sysconfdir}/ivy/
 
 install -d -m 755 %{buildroot}%{_sysconfdir}/xdg/xmvn
 install -p -m 644 configuration.xml %{buildroot}%{_sysconfdir}/xdg/xmvn/
+
+# Other directories that should be owned by the runtime
+install -d -m 755 %{buildroot}%{_datadir}/appdata
+# Native java bits are always in /usr/lib even on 64bit arches
+install -d -m 755 %{buildroot}%{_scl_root}/usr/lib/java
+# Otherwise unowned maven directories
+install -d -m 755 %{buildroot}%{_datadir}/maven-metadata
+install -d -m 755 %{buildroot}%{_datadir}/maven-poms
+# Otherwise unowned perl directories
+install -d -m 755 %{buildroot}%{_libdir}/perl5
+install -d -m 755 %{buildroot}%{_libdir}/perl5/vendor_perl
+install -d -m 755 %{buildroot}%{_libdir}/perl5/vendor_perl/auto
+
 
 %if 0%{?rhel} >= 7
 install -d %{buildroot}%{dockerfiledir}
@@ -403,6 +425,10 @@ install -p -m 644 %{?scl_name}.7 %{buildroot}%{_mandir}/man7/
 %{_sysconfdir}/ivy
 %{_sysconfdir}/java
 %dir %{_scl_root}/etc/alternatives
+%dir %{_datadir}/appdata
+%dir %{_scl_root}/usr/lib/java
+%dir %{_datadir}/maven-metadata
+%dir %{_datadir}/maven-poms
 
 %files build
 %{_root_sysconfdir}/rpm/macros.%{scl}*
@@ -435,6 +461,17 @@ if [ $1 = 0 ]; then
 fi
 
 %changelog
+* Tue Mar 29 2016 Marek Polacek <polacek@redhat.com> - 4.1-3
+- Update IDE requires to include new Eclipse components (#1319297)
+
+* Thu Feb 11 2016 Marek Polacek <polacek@redhat.com> - 4.1-2
+- Require gcc for dockerfiles (#1276365)
+
+* Thu Jan 21 2016 Mat Booth <mat.booth@redhat.com> - 4.1-1
+- Update IDE requires to include new Eclipse components
+- Fix some directory ownership issues
+- rhbz#1301003
+
 * Mon Oct 26 2015 Marek Polacek <polacek@redhat.com> - 4.0-9
 - Ship RHEL6 Dockerfiles on RHEL7 (#1265118)
 
