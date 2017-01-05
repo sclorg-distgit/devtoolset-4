@@ -7,7 +7,7 @@
 Summary: Package that installs %scl
 Name: %scl_name
 Version: 4.1
-Release: 3%{?dist}
+Release: 3.sc1%{?dist}
 License: GPLv2+
 Group: Applications/File
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
@@ -74,12 +74,12 @@ Requires: %{scl_prefix}eclipse-cdt
 Requires: %{scl_prefix}eclipse-cdt-docker
 Requires: %{scl_prefix}eclipse-cdt-parsers
 Requires: %{scl_prefix}eclipse-changelog
-Requires: %{scl_prefix}eclipse-dltk
-Requires: %{scl_prefix}eclipse-dltk-mylyn
-Requires: %{scl_prefix}eclipse-dltk-rse
-Requires: %{scl_prefix}eclipse-dltk-ruby
-Requires: %{scl_prefix}eclipse-dltk-sh
-Requires: %{scl_prefix}eclipse-dltk-tcl
+#Requires: %{scl_prefix}eclipse-dltk
+#Requires: %{scl_prefix}eclipse-dltk-mylyn
+#Requires: %{scl_prefix}eclipse-dltk-rse
+#Requires: %{scl_prefix}eclipse-dltk-ruby
+#Requires: %{scl_prefix}eclipse-dltk-sh
+#Requires: %{scl_prefix}eclipse-dltk-tcl
 Requires: %{scl_prefix}eclipse-egit
 Requires: %{scl_prefix}eclipse-egit-mylyn
 Requires: %{scl_prefix}eclipse-emf-runtime
@@ -92,7 +92,7 @@ Requires: %{scl_prefix}eclipse-linuxtools
 Requires: %{scl_prefix}eclipse-linuxtools-docker
 Requires: %{scl_prefix}eclipse-linuxtools-javadocs
 Requires: %{scl_prefix}eclipse-linuxtools-libhover
-Requires: %{scl_prefix}eclipse-linuxtools-vagrant
+#Requires: %{scl_prefix}eclipse-linuxtools-vagrant
 Requires: %{scl_prefix}eclipse-manpage
 Requires: %{scl_prefix}eclipse-mylyn
 Requires: %{scl_prefix}eclipse-mylyn-builds
